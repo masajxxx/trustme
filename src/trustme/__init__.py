@@ -238,6 +238,8 @@ class CA:
         path_length: int = 9,
         organization_name: Optional[str] = None,
         organization_unit_name: Optional[str] = None,
+        not_before: Optional[datetime.datetime] = None,
+        not_after: Optional[datetime.datetime] = None,
         key_type: KeyType = KeyType.ECDSA,
     ) -> None:
         self.parent_cert = parent_cert
@@ -264,7 +266,7 @@ class CA:
         else:
             aki = None
         cert_builder = _cert_builder_common(
-            name, issuer, self._private_key.public_key()
+            name, issuer, self._private_key.public_key(), not_after, not_before
         ).add_extension(
             x509.BasicConstraints(ca=True, path_length=path_length),
             critical=True,
